@@ -4,25 +4,46 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Hello, world!</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>HomeAssistant JS Example</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    <div class="container">
+      <h1>HomeAssistant JS Example</h1>
 
-    <button id="button">Get Sun state</button>
+      <h2>Get state of an entity</h2>
+      <p>Get the state of an entity, in this case the <code>sun.sun</code> entity.</p>
+      <p><button class="btn btn-primary" id="get-state">Get Sun state</button></p>
 
-    <script src="secrets.js"></script>
-    <script src="js/ha.js"></script>
+      <p>After pressing the button, the current state should show below:</p>
+      <input id="state" type="text">
 
-    <script type="text/javascript">
+      <h2>Get attribute of an entity</h2>
+      <p>Get a specific attribute of an entity, in this case the friendly name of the <code>sun.sun</code> entity.</p>
 
-      const ha = new HaAPI({ instance: HA_INSTANCE, token: HA_SECRET });
+      <p><button class="btn btn-primary" id="get-name">Get friendly name of entity</button></p>
+      <input id="friendly_name" type="text">
 
-      const button = document.getElementById("button");
-      button.addEventListener('click', function() {
-        ha.getState('sun.sun').then(r => alert(r['state']));
-      });
-      
-    </script>
+      <script src="secrets.js"></script>
+      <script src="js/ha.js"></script>
+
+      <script type="text/javascript">
+
+        const ha = new HaAPI({ instance: HA_INSTANCE, token: HA_SECRET });
+
+        const buttonA = document.getElementById("get-state");
+        buttonA.addEventListener('click', function() {
+          ha.getState('sun.sun').then(s => document.getElementById('state').value = s);
+        });
+
+        const buttonB = document.getElementById("get-name");
+        buttonB.addEventListener('click', function() {
+          ha.getAttribute('sun.sun', 'friendly_name').then(s => document.getElementById('friendly_name').value = s);
+        });
+
+      </script>
+    </div>
   </body>
 </html>
