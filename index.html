@@ -16,15 +16,17 @@
       <h2>Get state of an entity</h2>
       <p>Get the state of an entity, in this case the <code>sun.sun</code> entity.</p>
       <p><button class="btn btn-primary" id="get-state">Get Sun state</button></p>
-
       <p>After pressing the button, the current state should show below:</p>
       <input id="state" type="text">
 
       <h2>Get attribute of an entity</h2>
       <p>Get a specific attribute of an entity, in this case the friendly name of the <code>sun.sun</code> entity.</p>
-
       <p><button class="btn btn-primary" id="get-name">Get friendly name of entity</button></p>
       <input id="friendly_name" type="text">
+
+      <h2>Toggle a light/input boolean/switch</h2>
+      <p>Toggle an entity that has toggle support, this includes lights, switches and input booleans. There is no state returned.</p>
+      <p><button class="btn btn-primary" id="toggle">Toggle entity</button></p>
 
       <script src="secrets.js"></script>
       <script src="js/ha.js"></script>
@@ -33,7 +35,7 @@
 
         const ha = new HaAPI({ instance: HA_INSTANCE, token: HA_SECRET });
 
-        const buttonA = document.getElementById("get-state");
+        const buttonA = document.getElementById('get-state');
         buttonA.addEventListener('click', function() {
           ha.getState('sun.sun').then(s => document.getElementById('state').value = s);
         });
@@ -41,6 +43,11 @@
         const buttonB = document.getElementById("get-name");
         buttonB.addEventListener('click', function() {
           ha.getAttribute('sun.sun', 'friendly_name').then(s => document.getElementById('friendly_name').value = s);
+        });
+
+        const buttonC = document.getElementById("toggle");
+        buttonC.addEventListener('click', function() {
+          ha.toggle('light.light_1');
         });
 
       </script>

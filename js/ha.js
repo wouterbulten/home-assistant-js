@@ -70,9 +70,9 @@ class HaAPI {
   async setState(entity, state) {
     // Create headers for authentication
     const headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${this.token}`
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`
     };
 
     const url = `${this.instance}/api/states/${entity}`
@@ -82,5 +82,38 @@ class HaAPI {
     const newState = await response.json();
 
     return newState['state'];
+  }
+
+  /**
+   * Toggle an entity's state. Derives the type of the enity from the entity_id.
+   * @param  {string}  entity Entity id of the entity.
+   * @return {Promise}
+   */
+  async toggle(entity) {
+    // Create headers for authentication
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`
+    };
+
+    // Derive the correct endpoint from the entity id.
+    let type;
+    if(entity.includes('input_boolean')) {
+      type = 'input_boolean';
+    } else if(entity.includes('light')) {
+      type = 'light';
+    } else if(entity.includes('switch')) {
+      type = 'switch';
+    } else {
+      throw `Cannot toggle state for ${entity}, it is not a input_boolean, switch or light.`;
+    }
+
+    const url = `${this.instance}/api/services/${type}/toggle`;
+
+    const body = JSON.stringify({ 'entity_id': entity });
+
+    const response = await fetch(url, { method: 'POST', headers, body });
+    return await response.json();
   }
 }
