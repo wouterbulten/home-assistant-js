@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
+
+    <button id="button">Get Sun state</button>
+
+    <script src="secrets.js"></script>
+    <script src="js/ha.js"></script>
+
+    <script type="text/javascript">
+
+      const ha = new HaAPI({ instance: HA_INSTANCE, token: HA_SECRET });
+
+      const button = document.getElementById("button");
+      button.addEventListener('click', function() {
+        ha.getState('sun.sun').then(r => alert(r['state']));
+      });
+      
+    </script>
+  </body>
+</html>
